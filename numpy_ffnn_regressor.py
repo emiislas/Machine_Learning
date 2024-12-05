@@ -5,14 +5,14 @@ class FFNeuralNetwork:
     '''
     x1 \in R^{nxd}
     w1 \in R^{dxm}
-    b1 \in R_0^{dxm}
-    w2 \in R_0^{mxd}
+    b1 \in R_0^{m}
+    w2 \in R_0^{mxout}
+    b2 \ in R^{out}
     '''
-    def __init__(self, input_size, learning_rate, hidden_size):
-        output_size = input_size
-        self.w1 = np.random.randn(input_size, hidden_size) - 0.5
+    def __init__(self, input_width, learning_rate, hidden_width, output_size=1):
+        self.w1 = np.random.randn(input_width, hidden_size) - 0.5
         self.b1 = np.zeros(hidden_size) 
-        self.w2 = np.random.randn(hidden_size, output_size) - 0.5
+        self.w2 = np.random.randn(hidden_width, output_size) - 0.5
         self.b2 = np.zeros(output_size)
         self.alpha = learning_rate
 
