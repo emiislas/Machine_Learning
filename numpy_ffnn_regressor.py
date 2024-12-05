@@ -8,7 +8,8 @@ class FFNeuralNetwork:
     b1 \in R_0^{dxm}
     w2 \in R_0^{mxd}
     '''
-    def __init__(self, input_size, learning_rate, hidden_size, output_size=2):
+    def __init__(self, input_size, learning_rate, hidden_size):
+        output_size = input_size
         self.w1 = np.random.randn(input_size, hidden_size) - 0.5
         self.b1 = np.zeros(hidden_size) 
         self.w2 = np.random.randn(hidden_size, output_size) - 0.5
@@ -73,7 +74,7 @@ x2 = np.random.randn(100, 1) - 0.5
 y = func(x1,x2) 
 plt.plot(y)
 x = np.hstack((x1,x2))
-model = FFNeuralNetwork(input_size = x.shape[1], hidden_size = 50,learning_rate = 0.0001)
+model = FFNeuralNetwork(input_size = x.shape[1], hidden_size = 200,learning_rate = 0.0001)
 model.train(x,y,10000)
 plt.legend()
 plt.show()
