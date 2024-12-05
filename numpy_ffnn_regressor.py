@@ -2,7 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class FFNeuralNetwork:
-    def __init__(self, input_size, learning_rate, hidden_size, output_size=1):
+    '''
+    x1 \in R^{nxd}
+    w1 \in R^{dxm}
+    b1 \in R_0^{dxm}
+    w2 \in R_0^{mxd}
+    '''
+    def __init__(self, input_size, learning_rate, hidden_size, output_size=2):
         self.w1 = np.random.randn(input_size, hidden_size) - 0.5
         self.b1 = np.zeros(hidden_size) 
         self.w2 = np.random.randn(hidden_size, output_size) - 0.5
@@ -18,6 +24,7 @@ class FFNeuralNetwork:
     def dloss(self,y_true,y_pred):
         return -2*((y_pred-y_true)/len(y_true))
 
+
     def forward(self, x):
         z1 = x@self.w1 + self.b1
         a1 = self.relu(z1)
@@ -30,7 +37,7 @@ class FFNeuralNetwork:
     def back_relu(self,x):
         return x>0
 
-
+    
     def backward(self, a2, y_true, cache):
         dz2 = self.dloss(a2,y_true)
         dw2 = cache['a1'].T@dz2
@@ -58,14 +65,15 @@ class FFNeuralNetwork:
                 plt.plot(a2,linestyle='--',label=f'pred{i}')
 
 
-def func(x):
-    return np.sin(x) 
+def func(x1,x2):
+    return np.sin(x1) + x2 
 
-x = np.random.randn(100, 1) - 0.5
-y = func(x) 
+x1 = np.random.randn(100, 1) - 0.5
+x2 = np.random.randn(100, 1) - 0.5
+y = func(x1,x2) 
 plt.plot(y)
-
-model = FFNeuralNetwork(input_size = x.shape[1], hidden_size = 100,learning_rate = 0.0001)
+x = np.hstack((x1,x2))
+model = FFNeuralNetwork(input_size = x.shape[1], hidden_size = 50,learning_rate = 0.0001)
 model.train(x,y,10000)
 plt.legend()
 plt.show()
