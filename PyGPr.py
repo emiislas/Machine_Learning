@@ -25,6 +25,7 @@ class GPR:
                  data_y: np.array,
                  covariance_function=SquaredExponentialKernel(),
                  white_noise_sigma: float = 0):
+
         self.noise = white_noise_sigma
         self.data_x = data_x
         self.data_y = data_y
@@ -32,6 +33,7 @@ class GPR:
 
         # Store the inverse of covariance matrix of input (+ machine epsilon on diagonal) since it is needed for every prediction
         # machine epsilon to prevent non-invertible covariance matrix since we are dealing with matrix algebra
+        #K^{-1}
         self._inverse_of_covariance_matrix_of_input = np.linalg.inv(
             cov_matrix(data_x, data_x, covariance_function) +
             (3e-7 + self.noise) * np.identity(len(self.data_x)))
@@ -39,20 +41,20 @@ class GPR:
         self._memory = None
 
     # function to predict output at new input values. Store the mean and covariance matrix in memory.
-
     def predict(self, at_values: np.array) -> np.array:
+        #K_* = k(x,x*)
         k_lower_star = cov_matrix(self.data_x, at_values,
                                   self.covariance_function)
+        #K_** = l(x_*,x_*)
         k_lower_dstar = cov_matrix(at_values, at_values,
                                    self.covariance_function)
-
-        # Mean.
+        # Mean K_*K^{-1}y.
         mean_at_values = np.dot(
             k_lower_star,
             np.dot(self.data_y,
                    self._inverse_of_covariance_matrix_of_input.T).T).flatten()
 
-        # Covariance.
+        # Covariance K_**-K_*K^{-1}K_*^T.
         cov_at_values = k_lower_dstar - \
             np.dot(k_lower_star, np.dot(
                 self._inverse_of_covariance_matrix_of_input, k_lower_star.T))
