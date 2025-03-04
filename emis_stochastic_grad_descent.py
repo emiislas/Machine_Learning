@@ -16,19 +16,25 @@ stochastic_jump = 10
 
 x = np.random.randint(-2,10)
 
+mrk = 'x' 
+color = 'red'
 for i in range(1000):
-    mrk = 'o'
-    color = 'red'
-    if i %10 == 0 and i != 0:
+
+    x_new = x + alpha*dfdw(x)
+    if ((x_new-x)**2) < 0.1e-6:
         mrk = 'x' 
         color = 'blue'
-        x = np.random.randint(-2,10)
+        x_new = np.random.randint(-2,10)
 
-    x = x + alpha*dfdw(x)
-    plt.scatter(x, f(x), color=color, marker = mrk)
+    plt.scatter(x_new, f(x_new), color=color, marker = mrk)
     loss = ((x-xmax)**2)/2
     if loss < 0.1e-6:
         print("Loss:", loss, "Iterations:", i)
         break
+
+
+    mrk = 'o'
+    color = 'orange'
+    x = x_new
 
 plt.show()

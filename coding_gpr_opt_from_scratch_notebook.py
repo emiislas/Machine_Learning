@@ -1,4 +1,3 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.gaussian_process.kernels import Matern
@@ -20,8 +19,7 @@ def plot_GPRA(ax, data_x, data_y, model, x, kappa=2,visible=True) -> list:
 
     std = np.sqrt(model._memory['variance'])
     ucb = mean + kappa * std
-    print(x[np.argmax(ucb)], np.max(ucb))
-    plt.scatter(x[np.argmax(ucb)], np.max(ucb), marker='*', c ='red', label="UCB Max")
+    plt.scatter(x[np.argmax(ucb)], np.max(ucb), marker='*', c ='red', label=f"UCB Max: {x[np.argmax(ucb)]:0.1f}")
 
     #plt.plot(data_x, data_y)
     for i in range(1, kappa+1):
@@ -31,6 +29,7 @@ def plot_GPRA(ax, data_x, data_y, model, x, kappa=2,visible=True) -> list:
 
     ax.set_xlim(-2, 10)
     ax.set_ylim(0, 2) 
+    plt.legend(loc = 'upper right')
 
     return x[np.argmax(ucb)]
 
