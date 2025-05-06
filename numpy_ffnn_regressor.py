@@ -9,11 +9,11 @@ class FFNeuralNetwork:
     w2 \in R_0^{mxout}
     b2 \ in R^{out}
     '''
-    def __init__(self, input_width, learning_rate, hidden_width, output_size=1):
-        self.w1 = np.random.randn(input_width, hidden_size) - 0.5
-        self.b1 = np.zeros(hidden_size) 
-        self.w2 = np.random.randn(hidden_width, output_size) - 0.5
-        self.b2 = np.zeros(output_size)
+    def __init__(self, input_width, learning_rate, hidden_width, output_width=1):
+        self.w1 = np.random.randn(input_width, hidden_width) - 0.5
+        self.b1 = np.zeros(hidden_width) 
+        self.w2 = np.random.randn(hidden_width, output_width) - 0.5
+        self.b2 = np.zeros(output_width)
         self.alpha = learning_rate
 
     def relu(self, x): 
@@ -69,12 +69,12 @@ class FFNeuralNetwork:
 def func(x1,x2):
     return np.sin(x1) + x2 
 
-x1 = np.random.randn(100, 1) - 0.5
-x2 = np.random.randn(100, 1) - 0.5
+x1 = np.random.randn(500, 1) - 0.5
+x2 = np.random.randn(500, 1) - 0.5
 y = func(x1,x2) 
 plt.plot(y)
 x = np.hstack((x1,x2))
-model = FFNeuralNetwork(input_size = x.shape[1], hidden_size = 200,learning_rate = 0.0001)
+model = FFNeuralNetwork(input_width = x.shape[1], hidden_width = 200,learning_rate = 0.0001)
 model.train(x,y,10000)
 plt.legend()
 plt.show()
