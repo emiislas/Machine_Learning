@@ -16,8 +16,17 @@ class FFNeuralNetwork:
         self.b2 = np.zeros(output_width)
         self.alpha = learning_rate
 
+    def tanh(self, x):
+        return np.tanh(x)
+
+    def back_tanh(self, x):
+        return 1 - np.tanh(x)**2
+
     def relu(self, x): 
         return np.maximum(0,x)
+
+    def back_relu(self,x):
+        return x>0
 
     def loss(self,y_true,y_pred):
         return np.mean((y_pred-y_true)**2)
@@ -35,8 +44,6 @@ class FFNeuralNetwork:
 
         return a2, cache
 
-    def back_relu(self,x):
-        return x>0
 
     
     def backward(self, a2, y_true, cache):
@@ -66,15 +73,16 @@ class FFNeuralNetwork:
                 plt.plot(a2,linestyle='--',label=f'pred{i}')
 
 
-def func(x1,x2):
-    return np.sin(x1) + x2 
+#def func(x1):
+    #return np.sin(2*x1) + np.sin(x1) 
+#    return np.sin(2*x1)
 
-x1 = np.random.randn(500, 1) - 0.5
-x2 = np.random.randn(500, 1) - 0.5
-y = func(x1,x2) 
-plt.plot(y)
-x = np.hstack((x1,x2))
-model = FFNeuralNetwork(input_width = x.shape[1], hidden_width = 200,learning_rate = 0.0001)
+def func(x1):
+    return x**2
+#x = np.linspace(0,10,100).reshape(-1,1)
+x = np.linspace(-5,5,100).reshape(-1,1)
+y = func(x) 
+model = FFNeuralNetwork(input_width = x.shape[1], hidden_width = 50,learning_rate = 1e-5)
 model.train(x,y,10000)
 plt.legend()
 plt.show()
